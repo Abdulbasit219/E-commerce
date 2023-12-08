@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Layout from '../../components/Layout/Layout'
-import { Link, useNavigate } from 'react-router-dom'
-import Eyebutton from '../../components/Layout/Eyebutton'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import Eyebutton from '../../components/Eye/Eyebutton'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { useAuth } from '../../context/auth'
@@ -15,6 +15,7 @@ const signIn = () => {
     const [auth, setAuth] = useAuth();
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const onchange = (e) => {
         const { name, value } = e.target;
@@ -44,7 +45,7 @@ const signIn = () => {
                     token: res.data.token
                 })
                 localStorage.setItem('authData', JSON.stringify(res.data))
-                navigate('/');
+                navigate(location.state || '/');
             } else {
                 toast.error(res.data.message);
             }

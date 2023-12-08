@@ -99,5 +99,9 @@ module.exports = {
             success: true,
             message: 'Protected routes'
         })
-    } 
+},
+    
+    userController: (req, res) => {
+            res.status(200).send({ ok: true });
+}
 }

@@ -3,7 +3,7 @@ import Layout from '../../components/Layout/Layout'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { toast } from 'react-hot-toast'
-import Eyebutton from '../../components/Layout/Eyebutton';
+import Eyebutton from '../../components/Eye/Eyebutton';
 
 const signUp = () => {
 
