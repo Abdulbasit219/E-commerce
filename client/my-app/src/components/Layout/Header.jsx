@@ -8,6 +8,7 @@ import { useAuth } from '../../context/auth'
 const Header = () => {
 
   const [isMobile, setisMobile] = useState(false)
+  const [isMenuOpen, setisMenuOpen] = useState(false);
   const [auth, setAuth] = useAuth();
 
   const toggleMobile = () => {
@@ -41,9 +42,44 @@ const Header = () => {
           {
             auth.user ?
               (<>
-                <Link to="/" className='sign-out' onClick={handleLogout}>
-                  <li >Log out</li>
-                </Link>
+
+                <div className="relative inline-block text-left flex items-center justify-center">
+                  <div>
+                    <button
+                      className="flex w-full justify-center rounded-md md:bg-white px-3 text-sm text-gray-900 hover:opacity-50 outline-none sign-out"
+                      onClick={(e) => {
+                        setisMenuOpen(!isMenuOpen);
+                        e.stopPropagation()
+                      }}>
+
+                      {auth?.user?.name}
+
+                      <svg className="h-5 w-5 text-gray-800" >
+                        <path d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" />
+                      </svg>
+
+                    </button>
+                  </div>
+
+                  {isMenuOpen &&
+                    <div
+                      className="absolute right-12 top-16 md:right-0 md:top-12 z-10 mt-2 origin-top-right rounded-md bg-black text-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+
+                      <div className="py-1">
+
+                        <Link to={`/dashboard/${auth?.user?.isAdmin === 1 ? 'admin' : 'user'}`} className='block px-4 py-2'>
+                          <li >Dashboard</li>
+                        </Link>
+
+                        <Link to="/" className='block px-4 py-2' onClick={handleLogout}>
+                          <li >Log out</li>
+                        </Link>
+
+                      </div>
+                    </div>
+                  }
+                </div>
+
               </>)
               :
               (<>

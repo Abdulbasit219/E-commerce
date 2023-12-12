@@ -68,7 +68,7 @@
     position: relative;
 }
 
-.nav-cont ul li:before{
+/* .nav-cont ul li:before{
     content: '';
     position: absolute;
     left: 0;
@@ -82,7 +82,7 @@
 .nav-cont ul li:hover:before {
     width: 100%;
     background-color: black;
-}
+} */
 
 @media screen and (max-width: 800px) {
     .logo {

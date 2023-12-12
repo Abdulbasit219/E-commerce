@@ -7,6 +7,7 @@ import { toast } from 'react-hot-toast'
 import { useAuth } from '../../context/auth'
 
 const signIn = () => {
+
     const [showEye, setshoweye] = useState(false);
     const [signInData, setSignData] = useState({
         email: '',
@@ -75,6 +76,9 @@ const signIn = () => {
 
                         </div>
 
+                        <p className='hover:opacity-50'>
+                            <Link to={"/forgotPass"}>Forgot Password?</Link>
+                        </p>
                     </div>
 
                     <div className='text-center mt-4'>

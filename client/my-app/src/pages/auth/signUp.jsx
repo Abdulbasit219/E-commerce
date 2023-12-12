@@ -11,7 +11,8 @@ const signUp = () => {
     const [data, setData] = useState({
         name: '',
         email: '',
-        password: ''
+        password: '',
+        question: ''
     })
 
     const navigate = useNavigate();
@@ -30,11 +31,15 @@ const signUp = () => {
     }
 
     const handleSubmit = async (e) => {
-        const { name, email, password } = data;
+        const { name, email, password, question } = data;
         e.preventDefault();
         try {
             const res = await axios.post(`http://localhost:8080/api/v1/auth/register`,
-                { name, email, password }
+                {   name, 
+                    email, 
+                    password, 
+                    question 
+                }
             );
             if (res.data.success) {
                 toast.success(res.data.message, {duration: 10000});
@@ -49,7 +54,7 @@ const signUp = () => {
 
     return (
         <Layout title={'Ecommerce Sign up'}>
-            <div className='my-20'>
+            <div className='my-10'>
                 <form>
                     <div className='font-bold text-4xl p-2 text-center font-serif my-4'>
                         <p>Sign Up</p>
@@ -59,11 +64,13 @@ const signUp = () => {
 
                         <input type="text" name="name" onChange={onchange} placeholder='Enter Name here' className='border-b-2 border-black py-2 outline-none text-2xl mt-2 sm:w-[90%] md:w-[50%]' />
 
-                        <input type="text" name="email" onChange={onchange} placeholder='Enter Email here' className='border-b-2 border-black py-2 outline-none text-2xl mt-8 sm:w-[90%] md:w-[50%]' autoComplete="email" />
+                        <input type="text" name="email" onChange={onchange} placeholder='Enter Email here' className='border-b-2 border-black py-2 outline-none text-2xl mt-8 sm:w-[90%] md:w-[50%]' />
+
+                        <input type="text" name="question" onChange={onchange} placeholder='Enter Your Elementary School name' className='border-b-2 border-black py-2 outline-none text-2xl mt-8 sm:w-[90%] md:w-[50%]' />
 
                         <div className='sm:w-[90%] md:w-[50%] flex relative'>
 
-                            <input type={showEye ? 'text' : 'password'} name="password" placeholder='Enter Password here' onChange={onchange} className='border-b-2 border-black py-2 outline-none text-2xl mt-8 mb-2 w-full' autoComplete="off" />
+                            <input type={showEye ? 'text' : 'password'} name="password" placeholder='Enter Password here' onChange={onchange} className='border-b-2 border-black py-2 outline-none text-2xl mt-8 mb-2 w-full' />
 
                             <Eyebutton showEye={showEye} eyeToggle={eyeToggle}/>
                         </div>

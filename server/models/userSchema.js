@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    question:{
+        type: String,
+        required: true
+    },
     isAdmin: {
         type: Number,
         default: 0

@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const spinner = () => {
+const spinner = ({ path = 'signin' }) => {
+    //create for spinner calculation
     const [count, setCount] = useState(3);
-    
+
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
         const interval = setInterval(() => {
+
             setCount((val) => --val);
         }, 1000);
-        count === 0 && navigate('/signin',{
+
+        count === 0 && navigate(`${path}`, {
             state: location.pathname,
         })
-        
+
         const cleanInterval = () => {
             clearInterval(interval)
         }
 
         return cleanInterval;
-    
-    }, [count, navigate]);
+
+    }, [count, navigate, location, path]);
 
 
     return (
