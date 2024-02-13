@@ -1,9 +1,0 @@
-@media screen and (max-width: 768px) {
-    .mobile-screen{
-        flex-direction: column;   
-    }
-    .mobile-screen div{
-        margin-left: 0;
-        margin-top: 10px;
-    }
-}

@@ -27,6 +27,7 @@
     font-weight: bold;
     margin-left: 20px;
     font-family: serif;
+    width: 100%;
 }
 
 .logo span {
@@ -44,8 +45,7 @@
 .cart,
 .sign-Up,
 .sign-in,
-.cetegory,
-.sign-out
+.cetegory
 {
     text-decoration: none;
     font-size: 20px;
@@ -68,28 +68,14 @@
     position: relative;
 }
 
-/* .nav-cont ul li:before{
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 100%;
-    width: 0;
-    height: 2px;
-    background-color: black;
-    transition: all 0.5s linear;
-}
-
-.nav-cont ul li:hover:before {
-    width: 100%;
-    background-color: black;
-} */
 
 @media screen and (max-width: 800px) {
     .logo {
-        display: flex;
+        /* display: flex;
         justify-content: flex-start;
         width: 100%;
-        font-family: serif;
+        font-family: serif; */
+        display: none;
     }
 
     .nav-links {
@@ -98,10 +84,10 @@
 
     .nav-links-mobile {
         position: absolute;
-        z-index: 99;
+        z-index: 9999;
         display: block;
         list-style: none;
-        background-color: #d3d3d3;
+        background-color: #1F2937;
         left: 0;
         top: 75px;
         transition: all 0.5s linear;

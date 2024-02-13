@@ -19,7 +19,7 @@ const layout = ({ children, title, description, keywords, author }) => {
 
       <Header></Header>
       <main>
-        <div className='layout h-screen'>
+        <div className='layout'>
           <Toaster />
           {children}
         </div>

@@ -15,6 +15,13 @@ import AdminDashb from './pages/admin_dashboard/AdminDashb'
 import Category from './pages/admin_dashboard/Category'
 import Product from './pages/admin_dashboard/Product'
 import Adminuser from './pages/admin_dashboard/Adminuser'
+import Profile from './pages/user_dashboard/Profile'
+import Orders from './pages/user_dashboard/Orders'
+import AllProduct from './pages/admin_dashboard/AllProduct'
+import UpdatedProduct from './pages/admin_dashboard/UpdatedProduct'
+import Search from './pages/search/Search'
+import MoreDetail from './pages/productDetail/MoreDetail'
+import Catwisepro from './pages/category_wise_product/Catwisepro'
 
 const App = () => {
   return (
@@ -24,16 +31,23 @@ const App = () => {
         <Route path='about' element={<About />} />
         <Route path='contactus' element={<Contactus />} />
         <Route path='privacypolicy' element={<Policy />} />
+        <Route path='search' element={<Search />} />
+        <Route path='product/:slug' element={<MoreDetail />} />
+        <Route path='category-product/:slug' element={<Catwisepro />} />
 
         {/* Nested Routes */}
         <Route path='dashboard' element={<Privateroutes />}>
           <Route path='user' element={<Dashboard />} />
+          <Route path='user/profile' element={<Profile />} />
+          <Route path='user/orders' element={<Orders />} />
         </Route>
 
         <Route path='dashboard' element={<AdminRoutes />}>
           <Route path='admin' element={<AdminDashb />} />
           <Route path='admin/category' element={<Category />} />
           <Route path='admin/product' element={<Product />} />
+          <Route path='admin/product/:slug' element={< UpdatedProduct />} />
+          <Route path='admin/products' element={<AllProduct />} />
           <Route path='admin/users' element={<Adminuser />} />
         </Route>
 

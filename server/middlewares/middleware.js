@@ -5,17 +5,21 @@ const model = require('../models/userSchema');
 module.exports = {
     requiredSignIn: async (req,res,next) => {
         try{
-            const token_Verify = JWT.verify(req.headers.authorization, process.env.SECRET_KEY)
-            req.user = token_Verify;
+            const tokenVerify = JWT.verify(req.headers.authorization, process.env.SECRET_KEY)
+            req.user = tokenVerify;
             next();
         }catch(err){
             console.log(err)
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized Access in user signIn'
+            });
         }
     },
     adminController: async (req, res, next) => {
         try{
             const user = await model.findById(req.user._id);
-            if(user.isAdmin !== 1){
+            if(!user || user.isAdmin !== 1){
                 return res.status(401).send({
                         success: false,
                         message: 'unAuthorized Access'
@@ -25,6 +29,10 @@ module.exports = {
             }
         }catch(err){
             console.log(err)
+            return res.status(500).json({
+                success: false,
+                message: 'Internal Server Error'
+            });
         }
     } 
 }
