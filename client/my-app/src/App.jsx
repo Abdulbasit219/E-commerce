@@ -14,7 +14,6 @@ import AdminRoutes from './components/Routes/AdminRoutes'
 import AdminDashb from './pages/admin_dashboard/AdminDashb'
 import Category from './pages/admin_dashboard/Category'
 import Product from './pages/admin_dashboard/Product'
-import Adminuser from './pages/admin_dashboard/Adminuser'
 import Profile from './pages/user_dashboard/Profile'
 import Orders from './pages/user_dashboard/Orders'
 import AllProduct from './pages/admin_dashboard/AllProduct'
@@ -22,16 +21,21 @@ import UpdatedProduct from './pages/admin_dashboard/UpdatedProduct'
 import Search from './pages/search/Search'
 import MoreDetail from './pages/productDetail/MoreDetail'
 import Catwisepro from './pages/category_wise_product/Catwisepro'
+import Cartproduct from './pages/cart/Cartproduct'
+import ShopNow from './pages/shopnow/ShopNow'
+import AllOrders from './pages/admin_dashboard/AllOrders'
 
 const App = () => {
   return (
     <>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/allproduct' element={<ShopNow />} />
         <Route path='about' element={<About />} />
         <Route path='contactus' element={<Contactus />} />
         <Route path='privacypolicy' element={<Policy />} />
         <Route path='search' element={<Search />} />
+        <Route path='cart' element={<Cartproduct />}/>
         <Route path='product/:slug' element={<MoreDetail />} />
         <Route path='category-product/:slug' element={<Catwisepro />} />
 
@@ -42,13 +46,14 @@ const App = () => {
           <Route path='user/orders' element={<Orders />} />
         </Route>
 
+        {/* /dashboard/admin/orders */}
         <Route path='dashboard' element={<AdminRoutes />}>
           <Route path='admin' element={<AdminDashb />} />
           <Route path='admin/category' element={<Category />} />
           <Route path='admin/product' element={<Product />} />
           <Route path='admin/product/:slug' element={< UpdatedProduct />} />
           <Route path='admin/products' element={<AllProduct />} />
-          <Route path='admin/users' element={<Adminuser />} />
+          <Route path='admin/orders' element={<AllOrders />} />
         </Route>
 
         <Route path='signup' element={<SignUp />} />

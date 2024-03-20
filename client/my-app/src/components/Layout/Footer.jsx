@@ -8,7 +8,7 @@ import '.css';
 const Footer = () => {
   return (
     <>
-      <div className='bg-[#282C2F] py-10 text-white flex justify-around mobile-scr relative z-1'>
+      <div className='bg-gray-800 py-10 text-white flex justify-around mobile-scr relative z-1'>
 
         <div className='icon-div'>
 

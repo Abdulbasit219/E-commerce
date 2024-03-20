@@ -1,35 +1,36 @@
 const categoryModel = require('../models/category');
 const slugify = require('slugify');
+const productModel = require('../models/product');
 
 module.exports = {
     //crete category
     categoryController: async (req, res) => {
-    try{
-        
-        const {name} = req.body;
-        if(!name){
-            return res.status(401).send({message: "name is required"});
-        }
+        try {
 
-        const UpperCaseName = name.toUpperCase();
-        const slug = slugify(UpperCaseName, { lower: true });
+            const { name } = req.body;
+            if (!name) {
+                return res.status(401).send({ message: "name is required" });
+            }
 
-        const existingCategory = await categoryModel.findOne({name: UpperCaseName});
-        if(existingCategory){
-            return res.status(200).send({
+            const UpperCaseName = name.toUpperCase();
+            const slug = slugify(UpperCaseName, { lower: true });
+
+            const existingCategory = await categoryModel.findOne({ name: UpperCaseName });
+            if (existingCategory) {
+                return res.status(200).send({
+                    success: true,
+                    message: 'Category already exists'
+                });
+            }
+
+            const category = await new categoryModel({ name: UpperCaseName, slug }).save();
+            res.status(200).send({
                 success: true,
-                message:'Category already exists'
-            });
-        }
+                message: 'new category created',
+                category
+            })
 
-        const category = await new categoryModel({name: UpperCaseName, slug }).save();
-        res.status(200).send({
-            success: true,
-            message: 'new category created',
-            category
-        })
-
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.status(500).send({
                 success: false,
@@ -40,16 +41,16 @@ module.exports = {
 
     //update category
     updateCategoryController: async (req, res) => {
-        try{
-            const {name} = req.body;
-            const {id} = req.params;
-            const category = await categoryModel.findByIdAndUpdate(id, {name, slug:slugify(name)}, {new:true});
+        try {
+            const { name } = req.body;
+            const { id } = req.params;
+            const category = await categoryModel.findByIdAndUpdate(id, { name, slug: slugify(name) }, { new: true });
             res.status(200).send({
                 success: true,
                 message: 'Category updated successfully',
                 category
             })
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.status(500).send({
                 success: false,
@@ -60,14 +61,14 @@ module.exports = {
 
     //get All categories
     categories: async (req, res) => {
-        try{
+        try {
             const category = await categoryModel.find({});
             res.status(200).send({
                 success: true,
                 message: 'All Categories',
                 category
             })
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.status(500).send({
                 success: false,
@@ -77,11 +78,11 @@ module.exports = {
     },
 
     //get single category
-    singleCategoryController: async (req,res) => {
-        try{
-            const {slug} = req.params;
-            const category = await categoryModel.findOne({slug});
-            if(!category){
+    singleCategoryController: async (req, res) => {
+        try {
+            const { slug } = req.params;
+            const category = await categoryModel.findOne({ slug });
+            if (!category) {
                 return res.status(404).send({
                     success: false,
                     message: 'Category not found'
@@ -92,7 +93,7 @@ module.exports = {
                 message: 'Category found successfully',
                 category
             })
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.status(500).send({
                 success: false,
@@ -103,17 +104,18 @@ module.exports = {
 
     //delete single category
     deleteCategoryController: async (req, res) => {
-        try{
-            const {id} = req.params;
+        try {
+            const { id } = req.params;
             const deleteCategory = await categoryModel.findByIdAndDelete(id);
-            if(deleteCategory){
+            await productModel.deleteMany({ category: id });
+            if (deleteCategory) {
                 res.status(200).send({
                     success: true,
                     message: 'Category deleted successfully',
                     deleteCategory
                 })
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.status(500).send({
                 success: false,
@@ -123,17 +125,17 @@ module.exports = {
     },
 
     //Delete all categories
-    deleteAllCategoriesController: async (req,res) => {
-        try{
+    deleteAllCategoriesController: async (req, res) => {
+        try {
             const deleteCategories = await categoryModel.deleteMany({});
-            if(deleteCategories.length > 0){
+            if (deleteCategories.length > 0) {
                 res.status(200).send({
                     success: true,
                     message: 'All categories are deleted successfully',
                     deleteCategories
                 })
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
             res.status(500).send({
                 success: false,
@@ -141,5 +143,5 @@ module.exports = {
             })
         }
     }
-    
+
 }

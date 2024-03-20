@@ -1,6 +1,6 @@
-const { models } = require('mongoose');
 const { hashedPassword, comparePassword } = require('../helper/bcr_helper');
 const model = require('../models/userSchema');
+const orderModel = require('../models/order');
 const JWT = require('jsonwebtoken')
 
 module.exports = {
@@ -133,6 +133,63 @@ module.exports = {
                 message: 'Something went wrong',
                 err
             })
+        }
+    },
+
+    updateProfileController: async (req, res) => {
+        try {
+            const { name, password } = req.body;
+            const user = await model.findById(req.user._id);
+
+            if (password && password.length < 6) {
+                return res.json({
+                    error: 'Password is required and 6 characters required'
+                })
+            }
+
+            // let hashedPassword = password ? await hashedPassword(password) : undefined;
+
+            let hashPassword; // Declare hashedPassword variable here
+            if (password) {
+                hashPassword = await hashedPassword(password); // Assign value based on condition
+            }
+
+            const updatedUser = await model.findByIdAndUpdate(
+                req.user._id,
+                {
+                    name: name || user.name,
+                    password: hashPassword || user.password
+                },
+                { new: true }
+            );
+            res.status(200).send({
+                success: true,
+                message: 'Profile updated successfully',
+                updatedUser
+            });
+        } catch (err) {
+            console.log(err);
+            res.status(400).send({
+                success: false,
+                message: 'Error updating profile',
+                err
+            })
+        }
+    },
+
+    getorderController: async (req,res) => {
+        try {
+            const orders = await orderModel
+            .find({ buyer: req.user._id })
+            .populate("products", "-photo")
+            .populate("buyer", "name");
+        res.json(orders)
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({
+                success: false,
+                message: 'Error updating order'
+            });
         }
     }
 }

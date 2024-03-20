@@ -71,6 +71,10 @@ const Product = () => {
     getCategories();
   }, [])
 
+  useEffect(() => {
+    console.log(photo)
+  },[photo])
+
   return (
     <Layout title={'Ecommerce Admin-Product'}>
       <div className='flex p-6 flex-col md:flex-row'>
@@ -214,6 +218,7 @@ const Product = () => {
               <Option value='1'>No</Option>
             </Select>
 
+            {/* cancel and create product btn */}
             <div className="mt-6 flex items-center justify-center gap-x-6">
               
               <button type="button" className="text-sm font-semibold leading-6 text-gray-900 hover:opacity-50" onClick={() => navigate('/dashboard/admin')}>

@@ -1,5 +1,6 @@
 const productModel = require('../models/product');
 const categoryModel = require('../models/category');
+const orderModel = require('../models/order');
 const slugify = require('slugify');
 const fs = require('fs');
 
@@ -45,10 +46,57 @@ module.exports = {
     },
 
     //update product
+    // updateProductController: async (req, res) => {
+    //     try {
+    //         const id = req.params.id;
+    //         // console.log(id);
+    //         console.log(req.fields);
+    //         console.log(req.files);
+    //     //     const { name, description, price, category, quantity } = req.fields || {};
+    //     //     const { photo } = req.files;
+
+    //     //     if (!name || !description || !price || !category || !quantity) {
+    //     //         return res.status(500).send({
+    //     //             success: false,
+    //     //             message: 'All fields are required'
+    //     //         });
+    //     //     } else if (photo && photo.size > 1000000) {
+    //     //         return res.status(500).send({
+    //     //             success: false,
+    //     //             message: 'Photo is required and size should be less than 1mb'
+    //     //         });
+    //     //     }
+
+    //     //     // Extract category id from the object
+    //     //     const categoryId = category._id || category;
+
+    //     //     const updatedProduct = await productModel.findByIdAndUpdate(id, { ...req.fields, category: categoryId, slug: slugify(name) }, { new: true });
+
+
+    //     //     if (photo) {
+    //     //         updatedProduct.photo.data = fs.readFileSync(photo.path);
+    //     //         updatedProduct.photo.contentType = photo.type;
+    //     //         await updatedProduct.save();
+    //     //     }
+
+    //     //     res.status(200).send({
+    //     //         success: true,
+    //     //         message: 'Product updated successfully',
+    //     //         updatedProduct
+    //     //     });
+    //     } catch (e) {
+    //         console.log(e);
+    //         res.status(500).send({
+    //             success: false,
+    //             message: 'Error updating product'
+    //         });
+    //     }
+    // },
+
     updateProductController: async (req, res) => {
         try {
-            const id = req.params.id;
-            const { name, description, price, category, quantity } = req.fields || {};
+            const productId = req.params.id;
+            const { name, description, price, category, quantity } = req.fields;
             const { photo } = req.files;
 
             if (!name || !description || !price || !category || !quantity) {
@@ -59,29 +107,36 @@ module.exports = {
             } else if (photo && photo.size > 1000000) {
                 return res.status(500).send({
                     success: false,
-                    message: 'Photo is required and size should be less than 1mb'
+                    message: 'Photo is required and size is less than 1mb'
                 });
             }
 
-            // Extract category id from the object
-            const categoryId = category._id || category;
-
-            const updatedProduct = await productModel.findByIdAndUpdate(id, { ...req.fields, category: categoryId, slug: slugify(name) }, { new: true });
-
+            const updatedFields = { name, description, price, category, quantity, slug: slugify(name) };
 
             if (photo) {
-                updatedProduct.photo.data = fs.readFileSync(photo.path);
-                updatedProduct.photo.contentType = photo.type;
-                await updatedProduct.save();
+                updatedFields.photo = {
+                    data: fs.readFileSync(photo.path),
+                    contentType: photo.type
+                };
+            }
+
+            const updatedProduct = await productModel.findByIdAndUpdate(productId, updatedFields, { new: true });
+
+            if (!updatedProduct) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Product not found'
+                });
             }
 
             res.status(200).send({
                 success: true,
                 message: 'Product updated successfully',
-                updatedProduct
+                product: updatedProduct
             });
-        } catch (e) {
-            console.log(e);
+
+        } catch (err) {
+            console.error(err);
             res.status(500).send({
                 success: false,
                 message: 'Error updating product'
@@ -228,7 +283,7 @@ module.exports = {
                 .select('-photo')
                 .skip((page - 1) * perPage)
                 .limit(perPage)
-                // .sort({ createdAt: -1 });
+            // .sort({ createdAt: -1 });
             res.status(200).send({
                 success: true,
                 products
@@ -276,7 +331,7 @@ module.exports = {
                 .select('-photo')
                 .limit(3)
                 .populate('category');
-            
+
             res.status(200).send({
                 success: true,
                 product
@@ -298,7 +353,7 @@ module.exports = {
             res.status(200).send({
                 success: true,
                 products,
-                category 
+                category
             })
         } catch (error) {
             console.log(error);
@@ -307,5 +362,166 @@ module.exports = {
                 message: 'Error while geting category wise product'
             })
         }
+    },
+
+    //order sent by user
+    ordersByUser: async (req, res) => {
+        try {
+            const { shoppingCart, name, email, address, number } = req.body;
+            const order = new orderModel({
+                name: name,
+                email: email,
+                address: address,
+                products: shoppingCart,
+                buyer: req.user._id,
+                contactNumber: number
+            }).save()
+            res.json({ ok: true })
+        } catch (error) {
+            console.log(error);
+            res.status(400).send({
+                success: false,
+                message: 'Error While User Order'
+            })
+        }
+    },
+
+    //Delete product by user
+    productDeleteInOrder: async (req, res) => {
+        try {
+            const orderId = req.params.orderId;
+            const productId = req.params.productId;
+
+            // find order
+            const order = await orderModel.findById(orderId);
+            if (!order) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Order not found'
+                })
+            }
+
+            // find product index
+            const productIndex = order.products.findIndex(product => product._id === productId);
+            if (productIndex === -1) {
+                return res.status(404).send({ message: 'Product not found in the order' });
+            }
+
+            order.products.splice(productIndex, 1);
+            await order.save();
+
+            return res.status(200).send({
+                success: true,
+                message: 'Product deleted Successfully from order'
+            });
+
+        } catch (error) {
+            console.log(error);
+            res.status(404).send({
+                success: false,
+                message: 'Error while deleting Product'
+            })
+        }
+    },
+
+    //get order
+    getOrder: async (req, res) => {
+        try {
+            const order = await orderModel.find({}).limit(10).sort({ createdAt: -1 });
+            if (order) {
+                res.status(200).send({
+                    success: true,
+                    message: 'Order was successfully get',
+                    order
+                })
+            }
+        } catch (e) {
+            console.log(e);
+            res.status(404).send({
+                message: 'Error while getting order',
+                success: false
+            })
+        }
+    },
+
+    //find products based on order ID
+    getProductsbyOrderId: async (req, res) => {
+        try {
+            const orderId = req.params.orderId;
+
+            const order = await orderModel.findById({ _id: orderId });
+            if (order) {
+
+                const products = order.products;
+                return res.status(200).send({
+                    success: true,
+                    message: 'Order found',
+                    products,
+                })
+            }
+            else {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Order Not found',
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(404).send({
+                success: false,
+                message: 'Error while getting products based on order ID'
+            })
+        }
+    },
+
+    //order status update
+    orderStatusUpdate: async (req, res) => {
+        try {
+            const orderId = req.params.orderId;
+            const status = req.body.status;
+
+            const orders = await orderModel.findByIdAndUpdate(orderId, { status }, { new: true });
+            if (!orders) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Order not found'
+                });
+            }
+            res.json(orders);
+
+        } catch (error) {
+            res.status(404).send({
+                success: false,
+                message: 'Error while updating order status',
+                error
+            })
+        }
+    },
+
+    //Allow user to edit order
+    orderAllowEdit: async (req, res) => {
+        try {
+            const orderId = req.params.orderId;
+            const allowedStatus = req.body.allowedStatus;
+
+            const orders = await orderModel.findByIdAndUpdate(orderId, { allowEdit: allowedStatus }, { new: true });
+
+            if (!orders) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Order not found'
+                })
+            }
+
+            res.json(orders);
+
+        } catch (error) {
+            console.log(error);
+            res.status(404).send({
+                success: false,
+                message: 'Error while Allow order edit',
+            })
+        }
     }
 }
+

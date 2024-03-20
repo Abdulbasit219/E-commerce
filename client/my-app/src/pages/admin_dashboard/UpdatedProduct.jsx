@@ -26,11 +26,10 @@ const UpdatedProduct = () => {
     const navigate = useNavigate();
     const params = useParams();
 
-    //get single products
+    //get single products (not photo)
     const singleProducts = async () => {
         try {
             const { data } = await axios.get(`http://localhost:8080/api/v1/product/get-product/${params.slug}`);
-            console.log(data)
             setName(data.product.name);
             setCategory(data.product.category);
             setDescription(data.product.description);
@@ -44,22 +43,30 @@ const UpdatedProduct = () => {
         }
     }
 
-    //get All Categories
+    //get All Categories for select box
     const getCategories = async () => {
         try {
             const { data } = await axios.get('http://localhost:8080/api/v1/category/categories');
-                // console.log(data.category)
-                setCategories(data.category)
+            setCategories(data.category)
         } catch (e) {
             console.log(e);
             toast.error(data.message);
         }
     }
 
-   // Update product
+    //get photo
+    const getPhoto = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/v1/product/get-productphoto/${id}`);
+            // console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // Update product
     const updateProduct = async (e) => {
         e.preventDefault();
-        
         try {
             const productData = new FormData();
             productData.append('category', category);
@@ -68,19 +75,20 @@ const UpdatedProduct = () => {
             productData.append('price', price);
             productData.append('quantity', quantity);
             productData.append('photo', photo);
-    
+
             const { data } = await axios.put(`http://localhost:8080/api/v1/product/update-products/${id}`, productData, {
                 headers: {
-                    Authorization: parseData?.token 
+                    Authorization: parseData?.token
                 },
             });
-    
+
             if (data?.success) {
                 toast.success(data?.message);
                 navigate('/dashboard/admin/products');
             } else {
                 toast.error(data?.message);
             }
+
         } catch (e) {
             console.log(e);
             toast.error('Something went wrong');
@@ -89,26 +97,30 @@ const UpdatedProduct = () => {
 
     //delete product
     const deleteProduct = async () => {
-        try{
+        try {
             let answer = window.prompt('Are you sure you want to delete this product?');
-            if(!answer) return;
+            if (!answer) return;
 
-            const {data} = await axios.delete(`http://localhost:8080/api/v1/product/delete-product/${id}`)
+            const { data } = await axios.delete(`http://localhost:8080/api/v1/product/delete-product/${id}`)
             toast.success('product deleted successfully');
             navigate('/dashboard/admin/products');
-        }catch(e){
+        } catch (e) {
             console.log(e)
             toast.error('Something went wrong');
         }
     }
-    
+
     useEffect(() => {
         getCategories();
     }, [])
 
-    useEffect(() => {        
+    useEffect(() => {
         singleProducts();
-    },[]);
+    }, []);
+
+    useEffect(() => {
+        if (id) getPhoto();
+    }, [id])
 
     return (
         <Layout title={'Ecommerce Admin-Product'}>
@@ -122,19 +134,19 @@ const UpdatedProduct = () => {
                     <h1 className='p-2'>Product</h1>
                     <div>
 
-                        {/* {JSON.stringify(category, null, 2)} */}
-
                         {/* category */}
                         <Select
                             placeholder={'Select Category'}
                             size='large'
                             showSearch
                             className='w-72 outline-none'
-                            onChange={(value) => { setCategory(value) }}
-                            value={category.name}
+                            onChange={(value) => setCategory(value)}
+                            value={category} 
                         >
                             {categories.map((category) => (
-                                <Option key={category._id} value={category._id}>{category.name}</Option>
+                                <Option key={category._id} value={category._id}>
+                                    {category.name}
+                                </Option>
                             ))}
                         </Select>
 
@@ -157,7 +169,7 @@ const UpdatedProduct = () => {
                                                 className="sr-only"
                                                 onChange={(e) => setPhoto(e.target.files[0])} />
                                         </label>
-                                        <p className="pl-1">{photo ? '' : 'or drag and drop'}</p>
+                                        <p className="pl-1">or drag and drop</p>
                                     </div>
                                     <p className="text-xs leading-5 text-gray-600">{photo ? '' : 'PNG, JPG, GIF up to 10MB'}</p>
                                 </div>
@@ -173,7 +185,7 @@ const UpdatedProduct = () => {
                             ) : (
                                 <div className='text-center'>
                                     <img src={`http://localhost:8080/api/v1/product/get-productphoto/${id}`} alt="Product-photo" width={'200px'} />
-                                </div>                        
+                                </div>
                             )}
                         </div>
 
@@ -263,8 +275,8 @@ const UpdatedProduct = () => {
 
                         {/* button */}
                         <div className="mt-6 flex items-center justify-center gap-x-6">
-                        
-                            <button type="button" className="text-sm font-semibold leading-6 text-gray-900 hover:opacity-50" onClick={() => navigate('/dashboard/admin/products') }>
+
+                            <button type="button" className="text-sm font-semibold leading-6 text-gray-900 hover:opacity-50" onClick={() => navigate('/dashboard/admin/products')}>
                                 Cancel
                             </button>
                             <button
@@ -281,7 +293,7 @@ const UpdatedProduct = () => {
                             >
                                 Delete Product
                             </button>
-                        
+
                         </div>
 
                     </div>

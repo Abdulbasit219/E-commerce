@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../context/auth'
 import { Link } from 'react-router-dom';
-import SearchInput from '../Forms/searchInput';
+import SearchInput from '../Forms/SearchInput';
 import useCategory from '../../hooks/useCategory';
+import { useCart } from '../../context/cart';
+import { Badge } from 'antd';
+
 
 const Header = () => {
 
@@ -11,6 +14,7 @@ const Header = () => {
   const [auth, setAuth] = useAuth();
   const [isCategopen, setisCategopen] = useState(false);
   const categories = useCategory();
+  const [cart, setCart] = useCart();
 
   const handleLogout = () => {
     setAuth({
@@ -23,7 +27,7 @@ const Header = () => {
 
   return (
     <>
-      <nav className="relative bg-[#282C2F] shadow dark:bg-gray-800">
+      <nav className="relative bg-gray-800 shadow dark:bg-gray-800">
         <div className="container px-6 py-3 mx-auto md:flex justify-around">
 
 
@@ -51,13 +55,11 @@ const Header = () => {
           {/* {search box} */}
           <SearchInput />
 
-
-
           {/* Mobile Menu open: "block", Menu closed: "hidden" */}
           <div className={`${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'} absolute inset-x-0 z-20 px-6 py-4 transition-all duration-300 ease-in-out md:mt-0 md:p-0 md:top-0 md:relative md:opacity-100 md:translate-x-0 md:flex md:items-center md:justify-between`}>
 
             {/* menu item */}
-            <div className="flex flex-col px-2 -mx-4 md:flex-row md:mx-10 md:py-0 text-white font-serif items-center bg-[#282C2F]">
+            <div className="flex flex-col px-2 -mx-4 md:flex-row md:mx-10 md:py-0 text-white font-serif items-center bg-gray-800">
 
               <Link to="/" className="px-2.5 py-2 transition-colors duration-300 transform rounded-lg  hover:bg-gray-700 md:mx-2">Home</Link>
 
@@ -135,9 +137,11 @@ const Header = () => {
                     </>
                   )
               }
-              <Link to="/privacypolicy" className="px-2.5 py-2 transition-colors duration-300 transform rounded-lg  hover:bg-gray-700 md:mx-2">
-                <li >cart(0)</li>
-              </Link>
+              <Badge count={cart?.length} showZero className='p-2 transition-colors duration-300 transform rounded-lg  md:mx-2 text-white font-serif text-xl hover:bg-gray-700'>
+                <Link to="/cart" className="">
+                  cart
+                </Link>
+              </Badge>
             </div>
 
           </div>

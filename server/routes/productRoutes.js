@@ -12,7 +12,13 @@ const {
     productList,
     searchProduct,
     similarProduct,
-    catWiseProduct
+    catWiseProduct,
+    ordersByUser,
+    productDeleteInOrder,
+    getOrder,
+    getProductsbyOrderId,
+    orderStatusUpdate,
+    orderAllowEdit
 } = require('../controller/productController');
 const formidable = require('express-formidable');
 
@@ -53,5 +59,23 @@ router.get('/similar-product/:pid/:cid', similarProduct);
 
 // get categories wise products
 router.get('/product-category/:slug', catWiseProduct);
+
+// order post by user
+router.post('/sent-order', requiredSignIn, ordersByUser);
+
+//product delete in order 
+router.delete('/orders/:orderId/products/:productId', requiredSignIn, productDeleteInOrder);
+
+//get order
+router.get('/orders', requiredSignIn, adminController, getOrder);
+
+
+router.get('/orders/:orderId', requiredSignIn, adminController, getProductsbyOrderId);
+
+//order status update
+router.put('/order-status/:orderId', requiredSignIn, adminController, orderStatusUpdate);
+
+//allow for edit
+router.put('/allow-edit/:orderId', requiredSignIn, adminController, orderAllowEdit);
 
 module.exports = router;

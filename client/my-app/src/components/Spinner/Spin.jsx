@@ -10,7 +10,6 @@ const spinner = ({ path = 'signin' }) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-
             setCount((val) => --val);
         }, 1000);
 
