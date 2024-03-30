@@ -29,10 +29,6 @@ const Footer = () => {
               </Link>
               <Link to="/contactus" className='flex ml-2'>
                 <li className='hover:opacity-50'>Contact Us</li>
-                <p className='ml-2 font-bold'>|</p>
-              </Link>
-              <Link to="/privacypolicy" className='ml-2'>
-                <li className='hover:opacity-50'>Privacy Policy </li>
               </Link>
             </ul>
           </div>
@@ -55,19 +51,19 @@ const Footer = () => {
               <Link to={'/'}
                 target="_blank"
                 className='mt-2'><FaSquareFacebook />
-                </Link>
+              </Link>
               <Link to={'/'}
                 target="_blank"
                 className='ml-2 mt-2'><FaSquareTwitter />
-                </Link>
+              </Link>
               <Link to={'https://www.linkedin.com/in/abdul-basit-114a7322b/?original_referer=https%3A%2F%2Fgithub.com%2F'}
                 target="_blank"
                 className='ml-2 mt-2'><FaLinkedin />
-                </Link>
+              </Link>
               <Link to={'https://github.com/Abdulbasit219'}
                 target="_blank"
                 className='ml-2 mt-2'><FaGithubSquare />
-                </Link>
+              </Link>
             </div>
           </div>
 
