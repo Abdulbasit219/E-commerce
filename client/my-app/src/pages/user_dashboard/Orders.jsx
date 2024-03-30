@@ -65,7 +65,7 @@ const Orders = () => {
     }, [orders])
 
     return (
-        <Layout title={'Ecommerce User-Orders'}>
+        <Layout title={'Ecommerce User-Dashboard'}>
             <div className='flex p-6 flex-col md:flex-row'>
                 <div className='md:w-[30%]'>
                     <Usermenu />
@@ -118,7 +118,7 @@ const Orders = () => {
                                                     className="w-10 h-10 rounded-full"
                                                     src={`http://localhost:8080/api/v1/product/get-productphoto/${product._id}`} alt="User profile" />
                                                 <div className="ps-3">
-                                                    <div className="text-base font-semibold">{product.name}</div>
+                                                    <div className="text-base font-semibold">{product.name.substring(0, 20)}...</div>
                                                 </div>
 
                                             </td>
@@ -146,7 +146,7 @@ const Orders = () => {
 
                                             <td className="px-6 py-4">
                                                 {order.status === 'Pending' &&
-                                                    order.allowEdit === 'yes' ?
+                                                    order.allowEdit === 'no' ?
                                                     <a
                                                         href="#"
                                                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline"

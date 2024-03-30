@@ -3,13 +3,20 @@ import Layout from '../../components/Layout/Layout'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useCart } from '../../context/cart';
+import toast from 'react-hot-toast';
+
 
 const MoreDetail = () => {
 
     const params = useParams();
+
     const [product, setProducts] = useState({});
     const [similarProduct, setSimilarProduct] = useState([]);
 
+    //context
+    const [cart, setCart] = useCart();
+    
     // get product detail 
     const getProd = async () => {
         try {
@@ -28,6 +35,19 @@ const MoreDetail = () => {
             setSimilarProduct(data?.product);
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    //add item into cart
+    const addItem = (product) => {
+        const itemExists = cart.some(item => item._id === product._id);
+        if (itemExists) {
+            toast.success('Item Already Exists in cart');
+            return;
+        } else {
+            setCart([...cart, product]);
+            localStorage.setItem('cart', JSON.stringify([...cart, product]));
+            toast.success('Items added to Cart successfully');
         }
     }
 
@@ -100,33 +120,14 @@ const MoreDetail = () => {
 
                                 <div className="flex flex-wrap items-center ">
 
-                                    {/* plus minus button  */}
-                                    <div className="mb-4 mr-4 lg:mb-0">
-                                        <div className="w-28">
-                                            <div className="relative flex flex-row w-full h-10 bg-transparent rounded-lg">
-                                                <button
-                                                    className="w-20 h-full text-gray-600 bg-gray-100 border-r rounded-l outline-none cursor-pointer dark:border-gray-700 dark:hover:bg-gray-700 dark:text-gray-400 hover:text-gray-700 dark:bg-gray-900 hover:bg-gray-300">
-                                                    <span className="m-auto text-2xl font-thin">-</span>
-                                                </button>
-                                                <input type="number"
-                                                    className="flex items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-gray-100 outline-none dark:text-gray-400 dark:placeholder-gray-400 dark:bg-gray-900 focus:outline-none text-md hover:text-black"
-                                                    placeholder="1" />
-                                                <button
-                                                    className="w-20 h-full text-gray-600 bg-gray-100 border-l rounded-r outline-none cursor-pointer dark:border-gray-700 dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 hover:text-gray-700 hover:bg-gray-300">
-                                                    <span className="m-auto text-2xl font-thin">+</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     {/* buy now butn */}
                                     <div className="mb-4 mr-4 lg:mb-0">
                                         <button
-                                            className="w-full h-10 p-2 mr-4 bg-blue-500 text-gray-50 hover:bg-blue-600 rounded">
-                                            Buy Now
+                                            className="w-full h-10 p-2 mr-4 bg-blue-500 text-gray-50 hover:bg-blue-600 rounded"
+                                            onClick={() => addItem(product)}>
+                                            Add to cart
                                         </button>
                                     </div>
-
 
                                 </div>
                             </div>
@@ -134,8 +135,6 @@ const MoreDetail = () => {
                     </div>
                 </div>
             </section>
-
-
         </Layout >
     )
 }

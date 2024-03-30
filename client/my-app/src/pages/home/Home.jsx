@@ -7,7 +7,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     return (
-        <Layout>
+        <Layout title={'Home'}>
             <div className="container px-6 py-16 mx-auto">
                 <div className="items-center flex flex-col-reverse lg:flex-row">
                     <div className="w-full lg:w-1/2 my-6">

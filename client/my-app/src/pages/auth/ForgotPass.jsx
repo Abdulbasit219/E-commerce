@@ -33,9 +33,11 @@ const ForgotPass = () => {
         e.preventDefault();
         try {
             const res = await axios.post('http://localhost:8080/api/v1/auth/forgotpassword',
-                {   email, 
-                    question, 
-                    newPassword }
+                {
+                    email,
+                    question,
+                    newPassword
+                }
             );
             if (res.data.success) {
                 toast.success(res.data.message, { duration: 10000 });
@@ -49,7 +51,7 @@ const ForgotPass = () => {
     }
 
     return (
-        <Layout title={'Ecommerce Sign In'}>
+        <Layout title={'Ecommerce Reset Password'}>
             <div className='my-20'>
                 <form action="">
                     <div>

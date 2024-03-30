@@ -44,7 +44,12 @@ module.exports = {
         try {
             const { name } = req.body;
             const { id } = req.params;
-            const category = await categoryModel.findByIdAndUpdate(id, { name, slug: slugify(name) }, { new: true });
+
+            const UpperCaseName = name.toUpperCase();
+            const slug = slugify(UpperCaseName, { lower: true });
+
+            const category = await categoryModel.findByIdAndUpdate(id, { name: UpperCaseName, slug }, { new: true });
+
             res.status(200).send({
                 success: true,
                 message: 'Category updated successfully',

@@ -26,7 +26,7 @@ const AllProduct = () => {
     }, [])
 
     return (
-        <Layout title={'Ecommerce Admin-All-Products'}>
+        <Layout title={'Ecommerce Admin-Panel'}>
             <div className='flex p-6 flex-col md:flex-row'>
                 <div className='md:w-[30%]'>
                     <Adminmenu />

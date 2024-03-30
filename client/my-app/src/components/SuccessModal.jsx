@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const SuccessModal = ({ closeModall }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    useEffect(() => {
-        // Trigger the modal to open on component mount
-        setIsModalOpen(true);
-    }, []);
+    const navigate = useNavigate();
 
     const closeModal = () => {
         setIsModalOpen(false);
         closeModall();
+        navigate('/dashboard/user/orders');
     };
 
+    useEffect(() => {
+        setIsModalOpen(true);
+    }, []);
 
     return (
         <>

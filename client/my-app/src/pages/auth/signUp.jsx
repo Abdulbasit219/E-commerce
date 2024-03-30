@@ -35,14 +35,15 @@ const signUp = () => {
         e.preventDefault();
         try {
             const res = await axios.post(`http://localhost:8080/api/v1/auth/register`,
-                {   name, 
-                    email, 
-                    password, 
-                    question 
+                {
+                    name,
+                    email,
+                    password,
+                    question
                 }
             );
             if (res.data.success) {
-                toast.success(res.data.message, {duration: 10000});
+                toast.success(res.data.message, { duration: 10000 });
                 navigate('/signin');
             } else {
                 toast.error(res.data.message);
@@ -72,7 +73,7 @@ const signUp = () => {
 
                             <input type={showEye ? 'text' : 'password'} name="password" placeholder='Enter Password here' onChange={onchange} className='border-b-2 border-black py-2 outline-none text-2xl mt-8 mb-2 w-full' />
 
-                            <Eyebutton showEye={showEye} eyeToggle={eyeToggle}/>
+                            <Eyebutton showEye={showEye} eyeToggle={eyeToggle} />
                         </div>
 
                         <p>Already a member? <span className='font-bold cursor-pointer hover:text-blue-500 transition-colors duration-300'><Link to={'/signin'}>Log In</Link></span></p>

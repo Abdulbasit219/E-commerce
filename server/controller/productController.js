@@ -46,56 +46,9 @@ module.exports = {
     },
 
     //update product
-    // updateProductController: async (req, res) => {
-    //     try {
-    //         const id = req.params.id;
-    //         // console.log(id);
-    //         console.log(req.fields);
-    //         console.log(req.files);
-    //     //     const { name, description, price, category, quantity } = req.fields || {};
-    //     //     const { photo } = req.files;
-
-    //     //     if (!name || !description || !price || !category || !quantity) {
-    //     //         return res.status(500).send({
-    //     //             success: false,
-    //     //             message: 'All fields are required'
-    //     //         });
-    //     //     } else if (photo && photo.size > 1000000) {
-    //     //         return res.status(500).send({
-    //     //             success: false,
-    //     //             message: 'Photo is required and size should be less than 1mb'
-    //     //         });
-    //     //     }
-
-    //     //     // Extract category id from the object
-    //     //     const categoryId = category._id || category;
-
-    //     //     const updatedProduct = await productModel.findByIdAndUpdate(id, { ...req.fields, category: categoryId, slug: slugify(name) }, { new: true });
-
-
-    //     //     if (photo) {
-    //     //         updatedProduct.photo.data = fs.readFileSync(photo.path);
-    //     //         updatedProduct.photo.contentType = photo.type;
-    //     //         await updatedProduct.save();
-    //     //     }
-
-    //     //     res.status(200).send({
-    //     //         success: true,
-    //     //         message: 'Product updated successfully',
-    //     //         updatedProduct
-    //     //     });
-    //     } catch (e) {
-    //         console.log(e);
-    //         res.status(500).send({
-    //             success: false,
-    //             message: 'Error updating product'
-    //         });
-    //     }
-    // },
-
     updateProductController: async (req, res) => {
         try {
-            const productId = req.params.id;
+            const id = req.params.id;
             const { name, description, price, category, quantity } = req.fields;
             const { photo } = req.files;
 
@@ -107,36 +60,25 @@ module.exports = {
             } else if (photo && photo.size > 1000000) {
                 return res.status(500).send({
                     success: false,
-                    message: 'Photo is required and size is less than 1mb'
+                    message: 'Photo is required and size should be less than 1mb'
                 });
             }
 
-            const updatedFields = { name, description, price, category, quantity, slug: slugify(name) };
+            const updatedProduct = await productModel.findByIdAndUpdate(id, { ...req.fields, slug: slugify(name) }, { new: true });
 
             if (photo) {
-                updatedFields.photo = {
-                    data: fs.readFileSync(photo.path),
-                    contentType: photo.type
-                };
-            }
-
-            const updatedProduct = await productModel.findByIdAndUpdate(productId, updatedFields, { new: true });
-
-            if (!updatedProduct) {
-                return res.status(404).send({
-                    success: false,
-                    message: 'Product not found'
-                });
+                updatedProduct.photo.data = fs.readFileSync(photo.path);
+                updatedProduct.photo.contentType = photo.type;
+                await updatedProduct.save();
             }
 
             res.status(200).send({
                 success: true,
                 message: 'Product updated successfully',
-                product: updatedProduct
+                updatedProduct
             });
-
-        } catch (err) {
-            console.error(err);
+        } catch (e) {
+            console.log(e);
             res.status(500).send({
                 success: false,
                 message: 'Error updating product'
@@ -498,7 +440,7 @@ module.exports = {
         }
     },
 
-    //Allow user to edit order
+    //Lock orders
     orderAllowEdit: async (req, res) => {
         try {
             const orderId = req.params.orderId;
@@ -520,6 +462,25 @@ module.exports = {
             res.status(404).send({
                 success: false,
                 message: 'Error while Allow order edit',
+            })
+        }
+    },
+
+    // deleteOrder by admin 
+    deleteOrder: async (req, res) => {
+        try {
+            const order = await orderModel.findByIdAndDelete(req.params.orderId);
+            if (order) {
+                return res.status(200).send({
+                    success: true,
+                    message: 'Order deleted successfully'
+                })
+            }
+        } catch (error) {
+            res.status(404).send({
+                success: false,
+                message: 'Error while deleting order',
+                error
             })
         }
     }

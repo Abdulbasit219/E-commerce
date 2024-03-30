@@ -5,8 +5,9 @@ import { Checkbox, Radio } from 'antd'
 import Prices from '../../components/prices'
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/cart';
+import { useAuth } from '../../context/auth'
 import toast from 'react-hot-toast';
-import Slider from '../../components/Slider/Slider'
+import Slider from '../../components/Slider/carouselslider'
 
 const ShopNow = () => {
 
@@ -20,6 +21,7 @@ const ShopNow = () => {
 
     const navigate = useNavigate();
     const [cart, setCart] = useCart();
+    const [auth] = useAuth();
 
     //get all products
     const getAllProducts = async () => {
@@ -81,14 +83,8 @@ const ShopNow = () => {
     const loadMore = async () => {
         try {
             setLoading(true);
-
             const { data } = await axios.get(`http://localhost:8080/api/v1/product/product-list/${page}`);
-
-            // const newProducts = data?.products.filter(newProduct => !products.some(existingProduct => existingProduct._id === newProduct._id));
-
             setProducts([...products, ...data?.products])
-            // setProducts([...products, ...newProducts]);
-
             setLoading(false);
         } catch (error) {
             console.log(error);
@@ -98,6 +94,9 @@ const ShopNow = () => {
 
     //add item to cart
     const addItem = (product) => {
+        if (!auth.user) {
+            return toast.error('Please Login First to add product');
+        }
         const itemExists = cart.some(item => item._id === product._id);
         if (itemExists) {
             toast.success('Item Already Exists in cart');
@@ -129,13 +128,15 @@ const ShopNow = () => {
 
     return (
         <Layout title={"All Product - Best Offers"}>
+
             <Slider />
+
             <div className='flex flex-wrap m-2'>
 
-                <div className='w-[20%] border-2 hidden md:inline'>
+                <div className='w-full md:w-[20%] border-2 flex flex-col md:inline'>
 
                     <h1 className='font-bold text-2xl m-4'>Filter By Category</h1>
-                    <div className='flex flex-col ml-4'>
+                    <div className='flex md:flex-col ml-4'>
                         {categories?.map((category) => (
                             <Checkbox key={category._id} onChange={(e) => handleFilter(e.target.checked, category._id)} className='mt-2'>
                                 {category.name}
@@ -144,7 +145,7 @@ const ShopNow = () => {
                     </div>
 
                     <h1 className='font-bold text-2xl m-4'>Filter By Price</h1>
-                    <div className='flex flex-col ml-4'>
+                    <div className='flex md:flex-col ml-4'>
                         <Radio.Group onChange={(e) => setRadio(e.target.value)}>
                             {Prices?.map((Price) => (
                                 <div key={Price._id} className='mt-1'>
@@ -179,7 +180,7 @@ const ShopNow = () => {
                                         </div>
 
                                         <div>
-                                            <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
+                                            <h3 className="mt-4 text-xl text-gray-700 font-bold">{product.name.substring(0, 40)}...</h3>
                                             <p className="mt-1 text-lg font-medium text-gray-900">{product.description.substring(0, 20)}...</p>
                                             <p className="mt-1 text-lg font-medium text-gray-900">{product.price}&#36;</p>
 

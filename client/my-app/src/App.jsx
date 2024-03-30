@@ -35,7 +35,7 @@ const App = () => {
         <Route path='contactus' element={<Contactus />} />
         <Route path='privacypolicy' element={<Policy />} />
         <Route path='search' element={<Search />} />
-        <Route path='cart' element={<Cartproduct />}/>
+        <Route path='cart' element={<Cartproduct />} />
         <Route path='product/:slug' element={<MoreDetail />} />
         <Route path='category-product/:slug' element={<Catwisepro />} />
 

@@ -74,7 +74,7 @@ const Profile = () => {
     }, [auth?.user])
 
     return (
-        <Layout title={'Ecommerce User-Profile'}>
+        <Layout title={'Ecommerce User-Dashboard'}>
             <div className='flex p-6 flex-col md:flex-row'>
                 <div className='md:w-[30%]'>
                     <Usermenu />

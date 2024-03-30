@@ -29,7 +29,7 @@ const orderSchema = new mongoose.Schema({
     },
     allowEdit: {
         type: String,
-        default: 'yes',
+        default: 'no',
     }
 },
     { timestamps: true },

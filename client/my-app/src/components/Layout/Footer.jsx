@@ -52,10 +52,22 @@ const Footer = () => {
               <p className='font-bold text-2xl'>Follow Us:</p>
             </div>
             <div className='flex text-4xl social-media'>
-              <p className='mt-2'><FaSquareFacebook /></p>
-              <p className='ml-2 mt-2'><FaSquareTwitter /></p>
-              <p className='ml-2 mt-2'><FaLinkedin /></p>
-              <p className='ml-2 mt-2'><FaGithubSquare /></p>
+              <Link to={'/'}
+                target="_blank"
+                className='mt-2'><FaSquareFacebook />
+                </Link>
+              <Link to={'/'}
+                target="_blank"
+                className='ml-2 mt-2'><FaSquareTwitter />
+                </Link>
+              <Link to={'https://www.linkedin.com/in/abdul-basit-114a7322b/?original_referer=https%3A%2F%2Fgithub.com%2F'}
+                target="_blank"
+                className='ml-2 mt-2'><FaLinkedin />
+                </Link>
+              <Link to={'https://github.com/Abdulbasit219'}
+                target="_blank"
+                className='ml-2 mt-2'><FaGithubSquare />
+                </Link>
             </div>
           </div>
 

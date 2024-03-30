@@ -10,14 +10,16 @@ const { Option } = Select // for drop down menu
 
 const UpdatedProduct = () => {
 
-    const [categories, setCategories] = useState([]);
-    const [category, setCategory] = useState('');
-    const [photo, setPhoto] = useState('');
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
-    const [shipping, setShipping] = useState('');
+
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState('');
+    const [categoryId, setCategoryId] = useState('');
+
+    const [photo, setPhoto] = useState('');
     const [id, setId] = useState('');
 
     const authData = localStorage.getItem('authData'); //Get the data from localStorage
@@ -31,11 +33,11 @@ const UpdatedProduct = () => {
         try {
             const { data } = await axios.get(`http://localhost:8080/api/v1/product/get-product/${params.slug}`);
             setName(data.product.name);
-            setCategory(data.product.category);
+            setCategory(data.product.category.name);
+            setCategoryId(data.product.category._id);
             setDescription(data.product.description);
             setPrice(data.product.price);
             setQuantity(data.product.quantity);
-            setShipping(data.product.shipping);
             setId(data.product._id);
         } catch (e) {
             console.log(e)
@@ -47,7 +49,7 @@ const UpdatedProduct = () => {
     const getCategories = async () => {
         try {
             const { data } = await axios.get('http://localhost:8080/api/v1/category/categories');
-            setCategories(data.category)
+            setCategories(data.category);
         } catch (e) {
             console.log(e);
             toast.error(data.message);
@@ -58,7 +60,6 @@ const UpdatedProduct = () => {
     const getPhoto = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/api/v1/product/get-productphoto/${id}`);
-            // console.log(response)
         } catch (error) {
             console.log(error)
         }
@@ -69,7 +70,7 @@ const UpdatedProduct = () => {
         e.preventDefault();
         try {
             const productData = new FormData();
-            productData.append('category', category);
+            productData.append('category', categoryId);
             productData.append('name', name);
             productData.append('description', description);
             productData.append('price', price);
@@ -123,7 +124,7 @@ const UpdatedProduct = () => {
     }, [id])
 
     return (
-        <Layout title={'Ecommerce Admin-Product'}>
+        <Layout title={'Ecommerce Admin-Panel'}>
             <div className='flex p-6 flex-col md:flex-row'>
                 <div className='md:w-[30%]'>
                     <Adminmenu />
@@ -140,8 +141,11 @@ const UpdatedProduct = () => {
                             size='large'
                             showSearch
                             className='w-72 outline-none'
-                            onChange={(value) => setCategory(value)}
-                            value={category} 
+                            onChange={(value) => {
+                                setCategory(value);
+                                setCategoryId(value);
+                            }}
+                            value={category}
                         >
                             {categories.map((category) => (
                                 <Option key={category._id} value={category._id}>
@@ -259,19 +263,6 @@ const UpdatedProduct = () => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* shipping */}
-                        <Select
-                            placeholder={'Select shipping'}
-                            size='large'
-                            showSearch
-                            className='w-72 outline-none mt-5'
-                            onChange={(value) => { setShipping(value) }}
-                            value={shipping ? 'yes' : 'no'}
-                        >
-                            <Option value='0'>Yes</Option>
-                            <Option value='1'>No</Option>
-                        </Select>
 
                         {/* button */}
                         <div className="mt-6 flex items-center justify-center gap-x-6">

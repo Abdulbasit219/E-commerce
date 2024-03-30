@@ -18,7 +18,8 @@ const {
     getOrder,
     getProductsbyOrderId,
     orderStatusUpdate,
-    orderAllowEdit
+    orderAllowEdit,
+    deleteOrder
 } = require('../controller/productController');
 const formidable = require('express-formidable');
 
@@ -77,5 +78,8 @@ router.put('/order-status/:orderId', requiredSignIn, adminController, orderStatu
 
 //allow for edit
 router.put('/allow-edit/:orderId', requiredSignIn, adminController, orderAllowEdit);
+
+//order delete
+router.delete('/order/:orderId', requiredSignIn, adminController, deleteOrder);
 
 module.exports = router;

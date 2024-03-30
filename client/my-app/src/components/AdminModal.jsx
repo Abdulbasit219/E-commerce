@@ -19,7 +19,6 @@ const AdminModal = ({ closeModal, orderId }) => {
                 }
             })
             if (data) {
-                console.log(data.products)
                 setProducts(data.products);
             }
         } catch (error) {
@@ -136,7 +135,7 @@ const AdminModal = ({ closeModal, orderId }) => {
                                                     src={`http://localhost:8080/api/v1/product/get-productphoto/${product._id}`} alt="User profile" />
                                             </th>
                                             <td className="px-6 py-4">
-                                                {product.name}
+                                                {product.name.substring(0, 20)}...
                                             </td>
                                             <td className="px-6 py-4">
                                                 {product.price}

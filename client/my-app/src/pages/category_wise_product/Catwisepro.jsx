@@ -37,7 +37,7 @@ const Catwisepro = () => {
                         <p>No Products Found from this Category At this time</p>
                         :
                         <p>{products.length} Products founds from this Category</p>
-                        }
+                    }
 
                 </div>
 
@@ -47,7 +47,7 @@ const Catwisepro = () => {
                             <a className="group">
                                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                                     <img
-                                        src={`http://localhost:8080/api/v1/product/get-productphoto/${product._id}`}                                        className="h-full w-full object-cover object-center group-hover:opacity-75"
+                                        src={`http://localhost:8080/api/v1/product/get-productphoto/${product._id}`} className="h-full w-full object-cover object-center group-hover:opacity-75"
                                     />
                                 </div>
 

@@ -9,7 +9,7 @@ const Search = () => {
     const navigate = useNavigate();
 
     return (
-        <Layout>
+        <Layout title={'Search Item'}>
             <div className='w-[80%] flex flex-col items-center mx-auto py-6'>
                 
                 <div className='font-bold text-center text-2xl'>

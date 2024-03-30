@@ -20,7 +20,7 @@ const Category = () => {
   //Get All Categories
   const getCategories = async () => {
     try {
-      const {data} = await axios.get('http://localhost:8080/api/v1/category/categories');
+      const { data } = await axios.get('http://localhost:8080/api/v1/category/categories');
       if (data?.success) {
         setCategories(data.category)
       }
@@ -33,7 +33,6 @@ const Category = () => {
   //submit btn for new category (Create new category)
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const { data } = await axios.post(`http://localhost:8080/api/v1/category/create-category`, { name }, {
         headers: {
@@ -80,6 +79,9 @@ const Category = () => {
 
   const handleDelete = async (id) => {
     try {
+      let answer = window.prompt('Are you sure you want to delete this Category?');
+      if (!answer) return;
+
       const res = await axios.delete(`http://localhost:8080/api/v1/category/delete-category/${id}`);
       if (res.status === 200) {
         toast.success('Category deleted successfully');
@@ -92,7 +94,7 @@ const Category = () => {
   }
 
   return (
-    <Layout title={'Ecommerce Admin-Category'}>
+    <Layout title={'Ecommerce Admin-Panel'}>
       <div className='flex p-6 flex-col md:flex-row'>
         <div className='md:w-[30%]'>
           <Adminmenu />

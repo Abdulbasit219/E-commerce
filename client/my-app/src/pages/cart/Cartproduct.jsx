@@ -64,7 +64,7 @@ const Cartproduct = () => {
     }, [cart]);
 
     return (
-        <Layout>
+        <Layout title={'Ecommerce Cart'}>
             <div className="bg-gray-100 p-4">
                 <div className="container mx-auto mt-10">
 
@@ -102,8 +102,8 @@ const Cartproduct = () => {
                                                 <img className="h-24" src={`http://localhost:8080/api/v1/product/get-productphoto/${p._id}`} alt="" />
                                             </div>
                                             <div className="flex flex-col justify-between items-start ml-4 flex-grow">
-                                                <span className="font-bold text-sm">{p.name}</span>
-                                                <button className="text-red-500 text-xs hover:text-red-800">{p.name}</button>
+                                                <span className="font-bold text-sm">{p.name.substring(0, 30)}...</span>
+                                                <button className="text-red-500 text-xs hover:text-red-800">{p.name.substring(0, 30)}...</button>
                                                 <button className="font-semibold hover:text-red-500 text-gray-500 text-xs pointer" onClick={() => removeFromCart(p._id)}>Remove</button>
                                             </div>
                                         </div>
@@ -164,7 +164,6 @@ const Cartproduct = () => {
 
                     {/* check user login or not (button) */}
                     {!auth?.token && cart?.length > 0 && (
-
                         <div className="text-center">
                             <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase p-2 rounded mt-2"
                                 onClick={() => navigate('/signin',

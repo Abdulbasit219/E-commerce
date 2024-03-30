@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import AdminModal from '../../components/AdminModal'
 import { Select } from 'antd'
 import { FaFilter } from "react-icons/fa";
+import toast from 'react-hot-toast'
 const { Option } = Select;
 
 
@@ -84,12 +85,28 @@ const AllOrders = () => {
         }
     }
 
+    const handleDeleteOrder = async (orderId) => {
+        try {
+            const { data } = await axios.delete(`http://localhost:8080/api/v1/product/order/${orderId}`, {
+                headers: {
+                    Authorization: parseData?.token
+                }
+            });
+            if (data.success) {
+                toast.success('Order has been Deleted successfully');
+                getAllOrders();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         getAllOrders();
     }, [])
 
     return (
-        <Layout title={'Ecommerce All-Users'}>
+        <Layout title={'Ecommerce Admin Panel'}>
             <div className='flex p-6 flex-col md:flex-row'>
                 <div className='md:w-[30%]'>
                     <Adminmenu />
@@ -142,10 +159,13 @@ const AllOrders = () => {
                                             STATUS
                                         </th>
                                         <th scope="col" className="px-6 py-3">
-                                            Allow Edit
+                                            LOCK ORDER
                                         </th>
                                         <th scope="col" className="px-6 py-3">
                                             VIEW PRODUCTS
+                                        </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            DELETE ORDER
                                         </th>
                                     </tr>
                                 </thead>
@@ -216,6 +236,16 @@ const AllOrders = () => {
                                                         className='text-blue-500'>Products
                                                     </Link>
                                                 </td>
+
+                                                <td className="px-6 py-4">
+                                                    <Link
+                                                        onClick={() => {
+                                                            handleDeleteOrder(order._id);
+                                                        }}
+                                                        className='text-blue-500'>Delete
+                                                    </Link>
+                                                </td>
+
                                             </tr>
                                         ))}
                                 </tbody>
