@@ -1,0 +1,5 @@
+{
+  "name": "E-commerce",
+  "client": "./client/package.json",
+  "server": "./server/package.json"
+}
