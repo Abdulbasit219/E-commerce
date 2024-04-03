@@ -26,7 +26,9 @@ app.use('/api/v1/category', category);
 app.use('/api/v1/product', prodCreate);
 
 app.use('*', function (req, res) {
-    res.sendFile(path.join(__dirname, './client/dist/index.html'));
+    res.sendFile(path.join(__dirname, './client/dist/index.html'), function (err) {
+        res.status(500).send(err);
+    });
 })
 
 

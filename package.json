@@ -1,5 +1,0 @@
-{
-  "main": "index.js",
-  "client": "./client/package.json",
-  "server": "./server/package.json"
-}
