@@ -3,7 +3,7 @@ import Layout from '../../components/Layout/Layout'
 import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
-    
+
     const navigate = useNavigate();
 
     return (
@@ -12,7 +12,7 @@ const Home = () => {
                 <div className="items-center flex flex-col-reverse lg:flex-row">
                     <div className="w-full lg:w-1/2 my-6">
                         <div className="lg:max-w-lg">
-                            <h1 className="text-3xl font-semibold text-gray-800 dark:text-white lg:text-4xl">Best place to choose <br /> your <span className="text-[#FCBE69]">Products</span></h1>
+                            <h1 className="text-3xl font-semibold text-gray-800  text-4xl">Best place to choose <br /> your <span className="text-[#FCBE69]">Products</span></h1>
 
                             <p className="mt-3 text-gray-600 dark:text-gray-400">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro beatae error laborum ab amet sunt recusandae? Reiciendis natus perspiciatis optio.</p>
 

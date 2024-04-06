@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/cart';
 import toast from 'react-hot-toast';
+import { useAuth } from '../../context/auth'
 
 
 const MoreDetail = () => {
@@ -16,7 +17,8 @@ const MoreDetail = () => {
 
     //context
     const [cart, setCart] = useCart();
-    
+    const [auth] = useAuth();
+
     // get product detail 
     const getProd = async () => {
         try {
@@ -40,6 +42,9 @@ const MoreDetail = () => {
 
     //add item into cart
     const addItem = (product) => {
+        if (!auth.user) {
+            return toast.error('Please Login First to add product');
+        }
         const itemExists = cart.some(item => item._id === product._id);
         if (itemExists) {
             toast.success('Item Already Exists in cart');
@@ -57,11 +62,11 @@ const MoreDetail = () => {
 
     return (
         <Layout title={"Product Detail"}>
-            <section className="py-20 overflow-hidden bg-white font-poppins dark:bg-gray-800">
+            <section className="py-20 overflow-hidden bg-white font-poppins">
                 <div className="max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6">
                     <div className="flex flex-wrap -mx-4">
                         <div className="w-full px-4 md:w-1/2 ">
-                            <div className="sticky top-0 z-50 overflow-hidden ">
+                            <div className="sticky top-0 overflow-hidden ">
 
                                 {/* main image */}
                                 <div className="relative mb-6 lg:mb-10" style={{ height: '450px' }}>
@@ -70,7 +75,7 @@ const MoreDetail = () => {
                                     )}
                                 </div>
 
-                                <span className="text-lg font-medium">Similar Products</span>
+                                <span className="text-lg font-medium hidden md:block">Similar Products</span>
 
 
                                 <div className="flex-wrap hidden md:flex ">

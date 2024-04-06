@@ -37,7 +37,7 @@ const Footer = () => {
 
         <hr className='w-[80%] m-auto' />
 
-        <div className='w-[30%] text-div mt-10 mb-8'>
+        <div className='w-[80%] md:w-[30%] text-div mt-10 mb-8'>
 
           <div>
             <p className='font-bold text-2xl mb-6'>About the Company</p>
